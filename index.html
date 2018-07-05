@@ -132,7 +132,7 @@
         var oldOverlayCC = oldOverlay.getContext('2d');
         oldOverlayCC.clearRect(0, 0, 720, 576);
         ctrack.reset();
-        animateClean();
+        window.onload = animateClean();
       } else if (i == 2) {
         document.getElementById("image0").hidden = true;
         document.getElementById("image1").hidden = true;
@@ -165,16 +165,18 @@
         oldOverlayCC = oldOverlay.getContext('2d');
         oldOverlayCC.clearRect(0, 0, 720, 576);
         ctrack.reset();
-        animateClean();
+        window.onload = animateClean();
       } else if (i > 2) {
         i = 0;
+        picIndex = 'image' + i;
+        overlayIndex = 'overlay' + i;
         document.getElementById("image1").hidden = true;
         document.getElementById("image2").hidden = true;
         document.getElementById("image0").hidden = false;
 
-        canvas = document.getElementById("image0");
-        cc = document.getElementById("image0").getContext('2d');
-        overlay = document.getElementById("overlay0");
+        canvas = document.getElementById(picIndex);
+        cc = document.getElementById(picIndex).getContext('2d');
+        overlay = document.getElementById(overlayIndex);
         overlayCC = overlay.getContext('2d');
         img = new Image();
         img.onload = function() {
@@ -200,7 +202,7 @@
         oldOverlayCC = oldOverlay.getContext('2d');
         oldOverlayCC.clearRect(0, 0, 720, 576);
         ctrack.reset();
-        animateClean();
+        window.onload = animateClean();
       }
 
 
@@ -208,7 +210,6 @@
 
 		var drawRequest;
 		function animateClean() {
-      console.log(picIndex);
 			ctrack.start(document.getElementById(picIndex));
 			drawLoop();
 		}
