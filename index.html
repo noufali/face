@@ -1,55 +1,235 @@
 <html>
 
   <head></head>
+
   <body>
-    <div id="container">
-      <canvas id="image" width="625" height="500"></canvas>
-      <canvas id="overlay" width="625" height="500"></canvas>
+    <div id="container0">
+      <canvas id="image0" width="625" height="500"></canvas>
+      <canvas id="overlay0" width="625" height="500"></canvas>
     </div>
-    <!-- <img id="ali" src="faces/ali.png" alt="Ali's Face" style="margin:40px">
-    <img id="kyle" src="faces/kyle.png" alt="Kyle's Face" style="margin:40px">
-    <img id="natalie" src="faces/natalie.png" alt="Natalie's Face" style="margin:40px"> -->
+    <div id="container1">
+      <canvas id="image1" width="625" height="500"></canvas>
+      <canvas id="overlay1" width="625" height="500"></canvas>
+    </div>
+    <div id="container2">
+      <canvas id="image2" width="625" height="500"></canvas>
+      <canvas id="overlay2" width="625" height="500"></canvas>
+    </div>
     <script src="js/clmtrackr.js"></script>
     <script src="js/model_pca_20_svm.js"></script>
     <script src="js/p5.js"></script>
     <script src="js/p5.dom.js"></script>
   </body>
+  <style>
+    #overlay0 {
+				position: absolute;
+				top: 0px;
+				left: 0px;
+			}
+      #overlay1 {
+          position: absolute;
+          top: 0px;
+          left: 0px;
+      }
+      #overlay2 {
+          position: absolute;
+          top: 0px;
+          left: 0px;
+      }
+			#container0 {
+        /* background:grey; */
+				position : relative;
+				width : 300px;
+				height : 300px;
+        float: left;
+				/* margin : 0px auto; */
+			}
+      #container1 {
+        float: left;
+        position: relative;
+        /* background:pink; */
+        width : 300px;
+				height : 300px;
+      }
+      #container2 {
+        float: left;
+        position: relative;
+        /* background:purple; */
+        width : 300px;
+        height : 300px;
+      }
+  </style>
   <script>
-    // var ctracker;
-    // var cnv2;
-    var status = false;
-    var cc = document.getElementById('image').getContext('2d');
-		var overlay = document.getElementById('overlay');
+    setInterval(updateImage,5000);
+    var i = 0;
+    var picIndex = 'image' + i;
+    var overlayIndex = 'overlay' + i;
+
+    var canvas = document.getElementById(picIndex);
+    var cc = document.getElementById(picIndex).getContext('2d');
+		var overlay = document.getElementById(overlayIndex);
 		var overlayCC = overlay.getContext('2d');
-		var img = new Image();
+    var img = new Image();
 		img.onload = function() {
-			cc.drawImage(img,0,0,625, 500);
-      status = true;
+      if (img.height > 500 || img.width > 700) {
+  			var rel = img.height/img.width;
+  			var neww = 700;
+  			var newh = neww*rel;
+  			if (newh > 500) {
+  				newh = 500;
+  				neww = newh/rel;
+  			}
+  			canvas.setAttribute('width', neww);
+  			canvas.setAttribute('height', newh);
+  			cc.drawImage(img,0,0,neww, newh);
+  		} else {
+  			canvas.setAttribute('width', img.width);
+  			canvas.setAttribute('height', img.height);
+  			cc.drawImage(img,0,0,img.width, img.height);
+  		}
 		};
 		img.src = 'faces/ali.png';
 		var ctrack = new clm.tracker({stopOnConvergence : true});
 		ctrack.init();
 
+    function updateImage() {
+      console.log("5 second");
+      //ctrack.stop();
+      i += 1;
+      picIndex = 'image' + i;
+      overlayIndex = 'overlay' + i;
+
+      if (i == 1) {
+        document.getElementById("image0").hidden = true;
+        document.getElementById("image1").hidden = false;
+        document.getElementById("image2").hidden = true;
+
+        canvas = document.getElementById(picIndex);
+        cc = document.getElementById(picIndex).getContext('2d');
+    		overlay = document.getElementById(overlayIndex);
+    		overlayCC = overlay.getContext('2d');
+        img = new Image();
+    		img.onload = function() {
+          if (img.height > 500 || img.width > 700) {
+      			var rel = img.height/img.width;
+      			var neww = 700;
+      			var newh = neww*rel;
+      			if (newh > 500) {
+      				newh = 500;
+      				neww = newh/rel;
+      			}
+      			canvas.setAttribute('width', neww);
+      			canvas.setAttribute('height', newh);
+      			cc.drawImage(img,0,0,neww, newh);
+      		} else {
+      			canvas.setAttribute('width', img.width);
+      			canvas.setAttribute('height', img.height);
+      			cc.drawImage(img,0,0,img.width, img.height);
+      		}
+    		};
+    		img.src = 'faces/kyle.png';
+        var oldOverlay = document.getElementById('overlay0');
+        var oldOverlayCC = oldOverlay.getContext('2d');
+        oldOverlayCC.clearRect(0, 0, 720, 576);
+        ctrack.reset();
+        animateClean();
+      } else if (i == 2) {
+        document.getElementById("image0").hidden = true;
+        document.getElementById("image1").hidden = true;
+        document.getElementById("image2").hidden = false;
+        canvas = document.getElementById(picIndex);
+        cc = document.getElementById(picIndex).getContext('2d');
+    		overlay = document.getElementById(overlayIndex);
+    		overlayCC = overlay.getContext('2d');
+        img = new Image();
+    		img.onload = function() {
+          if (img.height > 500 || img.width > 700) {
+      			var rel = img.height/img.width;
+      			var neww = 700;
+      			var newh = neww*rel;
+      			if (newh > 500) {
+      				newh = 500;
+      				neww = newh/rel;
+      			}
+      			canvas.setAttribute('width', neww);
+      			canvas.setAttribute('height', newh);
+      			cc.drawImage(img,0,0,neww, newh);
+      		} else {
+      			canvas.setAttribute('width', img.width);
+      			canvas.setAttribute('height', img.height);
+      			cc.drawImage(img,0,0,img.width, img.height);
+      		}
+    		};
+    		img.src = 'faces/jin.png';
+        oldOverlay = document.getElementById('overlay1');
+        oldOverlayCC = oldOverlay.getContext('2d');
+        oldOverlayCC.clearRect(0, 0, 720, 576);
+        ctrack.reset();
+        animateClean();
+      } else if (i > 2) {
+        i = 0;
+        document.getElementById("image1").hidden = true;
+        document.getElementById("image2").hidden = true;
+        document.getElementById("image0").hidden = false;
+
+        canvas = document.getElementById("image0");
+        cc = document.getElementById("image0").getContext('2d');
+        overlay = document.getElementById("overlay0");
+        overlayCC = overlay.getContext('2d');
+        img = new Image();
+        img.onload = function() {
+          if (img.height > 500 || img.width > 700) {
+            var rel = img.height/img.width;
+            var neww = 700;
+            var newh = neww*rel;
+            if (newh > 500) {
+              newh = 500;
+              neww = newh/rel;
+            }
+            canvas.setAttribute('width', neww);
+            canvas.setAttribute('height', newh);
+            cc.drawImage(img,0,0,neww, newh);
+          } else {
+            canvas.setAttribute('width', img.width);
+            canvas.setAttribute('height', img.height);
+            cc.drawImage(img,0,0,img.width, img.height);
+          }
+        };
+        img.src = 'faces/ali.png';
+        oldOverlay = document.getElementById('overlay2');
+        oldOverlayCC = oldOverlay.getContext('2d');
+        oldOverlayCC.clearRect(0, 0, 720, 576);
+        ctrack.reset();
+        animateClean();
+      }
+
+
+    }
+
 		var drawRequest;
 		function animateClean() {
-			ctrack.start(document.getElementById('image'));
+      console.log(picIndex);
+			ctrack.start(document.getElementById(picIndex));
 			drawLoop();
 		}
 		function animate(box) {
-			ctrack.start(document.getElementById('image'), box);
+			ctrack.start(document.getElementById(picIndex), box);
 			drawLoop();
 		}
 		function drawLoop() {
+      var positions = ctrack.getCurrentPosition();
+      //console.log(positions);
 			drawRequest = requestAnimationFrame(drawLoop);
 			overlayCC.clearRect(0, 0, 720, 576);
 			if (ctrack.getCurrentPosition()) {
 				ctrack.draw(overlay);
 			}
 		}
-    if (status == true){
-      console.log(status);
+
+    window.onload = function() {
+      console.log("loaded");
       animateClean();
-    }
+    };
 
     // detect if tracker fails to find a face
     document.addEventListener("clmtrackrNotFound", function(event) {
@@ -61,13 +241,13 @@
     	ctrack.stop();
     	alert("The tracking had problems converging on a face in this image. Try selecting the face in the image manually.")
     }, false);
-    // detect if tracker has converged
-    document.addEventListener("clmtrackrConverged", function(event) {
-    	document.getElementById('convergence').innerHTML = "CONVERGED";
-    	document.getElementById('convergence').style.backgroundColor = "#00FF00";
-    	// stop drawloop
-    	cancelRequestAnimFrame(drawRequest);
-    }, false);
+
+
+
+
+
+
+
       // function setup() {
       //
       //   // setup camera capture
