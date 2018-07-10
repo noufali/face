@@ -3,17 +3,12 @@
   <head></head>
 
   <body>
-    <div id="container0">
-      <canvas id="image0" width="625" height="500"></canvas>
-      <canvas id="overlay0" width="625" height="500"></canvas>
-    </div>
-    <div id="container1">
-      <canvas id="image1" width="625" height="500"></canvas>
-      <canvas id="overlay1" width="625" height="500"></canvas>
-    </div>
-    <div id="container2">
-      <canvas id="image2" width="625" height="500"></canvas>
-      <canvas id="overlay2" width="625" height="500"></canvas>
+    <div id="container">
+				<video id="videoel" width="400" height="300" preload="auto" loop playsinline autoplay>
+				</video>
+				<canvas id="overlay" width="400" height="300"></canvas>
+		</div>
+    <div id="anim">
     </div>
     <script src="js/clmtrackr.js"></script>
     <script src="js/model_pca_20_svm.js"></script>
@@ -21,300 +16,107 @@
     <script src="js/p5.dom.js"></script>
   </body>
   <style>
-    #overlay0 {
+  #overlay {
 				position: absolute;
 				top: 0px;
 				left: 0px;
+				-o-transform : scaleX(-1);
+				-webkit-transform : scaleX(-1);
+				transform : scaleX(-1);
+				-ms-filter : fliph; /*IE*/
+				filter : fliph; /*IE*/
 			}
-      #overlay1 {
-          position: absolute;
-          top: 0px;
-          left: 0px;
-      }
-      #overlay2 {
-          position: absolute;
-          top: 0px;
-          left: 0px;
-      }
-			#container0 {
-        /* background:grey; */
+			#videoel {
+				-o-transform : scaleX(-1);
+				-webkit-transform : scaleX(-1);
+				transform : scaleX(-1);
+				-ms-filter : fliph; /*IE*/
+				filter : fliph; /*IE*/
+			}
+			#container {
 				position : relative;
-				width : 300px;
-				height : 300px;
-        float: left;
-				/* margin : 0px auto; */
+				width : 370px;
+				/*margin : 0px auto;*/
 			}
-      #container1 {
-        float: left;
-        position: relative;
-        /* background:pink; */
-        width : 300px;
-				height : 300px;
-      }
-      #container2 {
-        float: left;
-        position: relative;
-        /* background:purple; */
-        width : 300px;
-        height : 300px;
+      #anim {
+        margin-top: 50px;
+        background-color: pink;
+        width: 5000px;
+        height: 600px;
       }
   </style>
   <script>
-    setInterval(updateImage,5000);
-    var i = 0;
-    var picIndex = 'image' + i;
-    var overlayIndex = 'overlay' + i;
+  var vid = document.getElementById('videoel');
+  var vid_width = vid.width;
+  var vid_height = vid.height;
+  var overlay = document.getElementById('overlay');
+  var overlayCC = overlay.getContext('2d');
 
-    var canvas = document.getElementById(picIndex);
-    var cc = document.getElementById(picIndex).getContext('2d');
-		var overlay = document.getElementById(overlayIndex);
-		var overlayCC = overlay.getContext('2d');
-    var img = new Image();
-		img.onload = function() {
-      if (img.height > 500 || img.width > 700) {
-  			var rel = img.height/img.width;
-  			var neww = 700;
-  			var newh = neww*rel;
-  			if (newh > 500) {
-  				newh = 500;
-  				neww = newh/rel;
-  			}
-  			canvas.setAttribute('width', neww);
-  			canvas.setAttribute('height', newh);
-  			cc.drawImage(img,0,0,neww, newh);
-  		} else {
-  			canvas.setAttribute('width', img.width);
-  			canvas.setAttribute('height', img.height);
-  			cc.drawImage(img,0,0,img.width, img.height);
-  		}
-		};
-		img.src = 'faces/ali.png';
-		var ctrack = new clm.tracker({stopOnConvergence : true});
-		ctrack.init();
-
-    function updateImage() {
-      console.log("5 second");
-      //ctrack.stop();
-      i += 1;
-      picIndex = 'image' + i;
-      overlayIndex = 'overlay' + i;
-
-      if (i == 1) {
-        document.getElementById("image0").hidden = true;
-        document.getElementById("image1").hidden = false;
-        document.getElementById("image2").hidden = true;
-
-        canvas = document.getElementById(picIndex);
-        cc = document.getElementById(picIndex).getContext('2d');
-    		overlay = document.getElementById(overlayIndex);
-    		overlayCC = overlay.getContext('2d');
-        img = new Image();
-    		img.onload = function() {
-          if (img.height > 500 || img.width > 700) {
-      			var rel = img.height/img.width;
-      			var neww = 700;
-      			var newh = neww*rel;
-      			if (newh > 500) {
-      				newh = 500;
-      				neww = newh/rel;
-      			}
-      			canvas.setAttribute('width', neww);
-      			canvas.setAttribute('height', newh);
-      			cc.drawImage(img,0,0,neww, newh);
-      		} else {
-      			canvas.setAttribute('width', img.width);
-      			canvas.setAttribute('height', img.height);
-      			cc.drawImage(img,0,0,img.width, img.height);
-      		}
-    		};
-    		img.src = 'faces/kyle.png';
-        var oldOverlay = document.getElementById('overlay0');
-        var oldOverlayCC = oldOverlay.getContext('2d');
-        oldOverlayCC.clearRect(0, 0, 720, 576);
-        ctrack.reset();
-        window.onload = animateClean();
-      } else if (i == 2) {
-        document.getElementById("image0").hidden = true;
-        document.getElementById("image1").hidden = true;
-        document.getElementById("image2").hidden = false;
-        canvas = document.getElementById(picIndex);
-        cc = document.getElementById(picIndex).getContext('2d');
-    		overlay = document.getElementById(overlayIndex);
-    		overlayCC = overlay.getContext('2d');
-        img = new Image();
-    		img.onload = function() {
-          if (img.height > 500 || img.width > 700) {
-      			var rel = img.height/img.width;
-      			var neww = 700;
-      			var newh = neww*rel;
-      			if (newh > 500) {
-      				newh = 500;
-      				neww = newh/rel;
-      			}
-      			canvas.setAttribute('width', neww);
-      			canvas.setAttribute('height', newh);
-      			cc.drawImage(img,0,0,neww, newh);
-      		} else {
-      			canvas.setAttribute('width', img.width);
-      			canvas.setAttribute('height', img.height);
-      			cc.drawImage(img,0,0,img.width, img.height);
-      		}
-    		};
-    		img.src = 'faces/jin.png';
-        oldOverlay = document.getElementById('overlay1');
-        oldOverlayCC = oldOverlay.getContext('2d');
-        oldOverlayCC.clearRect(0, 0, 720, 576);
-        ctrack.reset();
-        window.onload = animateClean();
-      } else if (i > 2) {
-        i = 0;
-        picIndex = 'image' + i;
-        overlayIndex = 'overlay' + i;
-        document.getElementById("image1").hidden = true;
-        document.getElementById("image2").hidden = true;
-        document.getElementById("image0").hidden = false;
-
-        canvas = document.getElementById(picIndex);
-        cc = document.getElementById(picIndex).getContext('2d');
-        overlay = document.getElementById(overlayIndex);
-        overlayCC = overlay.getContext('2d');
-        img = new Image();
-        img.onload = function() {
-          if (img.height > 500 || img.width > 700) {
-            var rel = img.height/img.width;
-            var neww = 700;
-            var newh = neww*rel;
-            if (newh > 500) {
-              newh = 500;
-              neww = newh/rel;
-            }
-            canvas.setAttribute('width', neww);
-            canvas.setAttribute('height', newh);
-            cc.drawImage(img,0,0,neww, newh);
-          } else {
-            canvas.setAttribute('width', img.width);
-            canvas.setAttribute('height', img.height);
-            cc.drawImage(img,0,0,img.width, img.height);
-          }
-        };
-        img.src = 'faces/ali.png';
-        oldOverlay = document.getElementById('overlay2');
-        oldOverlayCC = oldOverlay.getContext('2d');
-        oldOverlayCC.clearRect(0, 0, 720, 576);
-        ctrack.reset();
-        window.onload = animateClean();
-      }
-
-
-    }
-
-		var drawRequest;
-		function animateClean() {
-			ctrack.start(document.getElementById(picIndex));
-			drawLoop();
-		}
-		function animate(box) {
-			ctrack.start(document.getElementById(picIndex), box);
-			drawLoop();
-		}
-		function drawLoop() {
-      var positions = ctrack.getCurrentPosition();
-      //console.log(positions);
-			drawRequest = requestAnimationFrame(drawLoop);
-			overlayCC.clearRect(0, 0, 720, 576);
-			if (ctrack.getCurrentPosition()) {
-				ctrack.draw(overlay);
+  //browser asking for camera
+  navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia;
+	window.URL = window.URL || window.webkitURL || window.msURL || window.mozURL;
+	// check for camerasupport
+	if (navigator.getUserMedia) {
+		// set up stream
+		// chrome 19 shim
+		var videoSelector = {video : true};
+		if (window.navigator.appVersion.match(/Chrome\/(.*?) /)) {
+			var chromeVersion = parseInt(window.navigator.appVersion.match(/Chrome\/(\d+)\./)[1], 10);
+			if (chromeVersion < 20) {
+				videoSelector = "video";
 			}
+		};
+		navigator.getUserMedia(videoSelector, function( stream ) {
+			if (vid.mozCaptureStream) {
+				vid.mozSrcObject = stream;
+			} else {
+				vid.src = (window.URL && window.URL.createObjectURL(stream)) || stream;
+			}
+			vid.play();
+		}, function() {
+			alert("There was some problem trying to fetch video from your webcam, using a fallback video instead.");
+		});
+	} else {
+		alert("Your browser does not seem to support getUserMedia, using a fallback video instead.");
+	}
+	//if browser supports video then change video value to true and load everything
+	vid.addEventListener('canplay', function() {videoReady = true;startVideo();}, false);
+
+
+  var ctrack = new clm.tracker();
+	ctrack.init();
+	var trackingStarted = false;
+
+	function startVideo() {
+		// start video
+		vid.play();
+		// start tracking
+		ctrack.start(vid);
+		trackingStarted = true;
+		// start loop to draw face
+		drawLoop();
+	}
+  function setup() {
+    // setup canvas
+    var cnv = createCanvas(400, 300);
+    cnv.position(0, 0);
+  }
+
+
+	function drawLoop() {
+		requestAnimationFrame(drawLoop);
+    var positions = ctrack.getCurrentPosition();
+    if (positions) {
+      let dis = dist(positions[44][0], positions[44][1],positions[50][0], positions[50][1]);
+      //console.log(dis);
+    }
+		overlayCC.clearRect(0, 0, vid_width, vid_height);
+		//psrElement.innerHTML = "score :" + ctrack.getScore().toFixed(4);
+		if (ctrack.getCurrentPosition()) {
+			ctrack.draw(overlay);
 		}
+	}
 
-    window.onload = function() {
-      console.log("loaded");
-      animateClean();
-    };
-
-    // detect if tracker fails to find a face
-    document.addEventListener("clmtrackrNotFound", function(event) {
-    	ctrack.stop();
-    	alert("The tracking had problems with finding a face in this image. Try selecting the face in the image manually.")
-    }, false);
-    // detect if tracker loses tracking of face
-    document.addEventListener("clmtrackrLost", function(event) {
-    	ctrack.stop();
-    	alert("The tracking had problems converging on a face in this image. Try selecting the face in the image manually.")
-    }, false);
-
-
-
-
-
-
-
-      // function setup() {
-      //
-      //   // setup camera capture
-      //   var videoInput = createCapture(VIDEO);
-      //   videoInput.size(400, 300);
-      //   videoInput.position(0 , 300);
-      //
-      //   // setup canvas
-      //   var cnv = createCanvas(400, 300);
-      //   cnv.position(0, 300);
-      //
-      //   cnv2 = createGraphics(400, 300);
-      //   cnv2.position(400, 300);
-      //
-      //   // setup tracker
-      //   ctracker = new clm.tracker();
-      //   ctracker.init(pModel);
-      //   ctracker.start(videoInput.elt);
-      //
-      //   noStroke();
-      // }
-      //
-      // function draw() {
-      //   clear();
-      //   cnv2.background(100);
-      //
-      //   // get array of face marker positions [x, y] format
-      //   var positions = ctracker.getCurrentPosition();
-      //   //console.log(positions);
-      //   // set the color of the ellipse based on position on screen
-      //   // push();
-      //   // // draw ellipse at each position point
-      //   // if (positions){
-      //   //   stroke('red');
-      //   //   strokeWeight(4);
-      //   //   fill('red');
-      //   //   //33 is between eyebrows
-      //   //   ellipse(positions[35][0], positions[35][1], 8, 8);
-      //   //   ellipse(positions[39][0], positions[39][1], 8, 8);
-      //   //
-      //   //   line(positions[33][0], positions[33][1],positions[35][0], positions[35][1]);
-      //   //   line(positions[33][0], positions[33][1],positions[39][0], positions[39][1]);
-      //   //
-      //   //   line(positions[35][0], positions[35][1],positions[39][0], positions[39][1]);
-      //   //
-      //   //   line(positions[35][0], positions[35][1],positions[44][0], positions[44][1]);
-      //   //   line(positions[39][0], positions[39][1],positions[50][0], positions[50][1]);
-      //   //
-      //   //
-      //   //   //ellipse(positions[50][0], positions[50][1], 8, 8);
-      //   //   //line(positions[44][0], positions[44][1],positions[50][0], positions[50][1]);
-      //   //   let num = dist(positions[44][0], positions[44][1],positions[50][0], positions[50][1]);
-      //   //   //console.log(num);
-      //   // }
-      //   // // 44 is left corner of mouth
-      //   // // 50 is right corner of mouth
-      //   // pop();
-      //
-      //   for (var i=0; i<positions.length; i++) {
-      //     // set the color of the ellipse based on position on screen
-      //     fill(map(positions[i][0], width*0.33, width*0.66, 0, 255), map(positions[i][1], height*0.33, height*0.66, 0, 255), 255);
-      //     // draw ellipse at each position point
-      //     ellipse(positions[i][0], positions[i][1], 5, 5);
-      //   }
-
-      //}
     </script>
 
 </html>
